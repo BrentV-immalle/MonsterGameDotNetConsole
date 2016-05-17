@@ -10,6 +10,12 @@ namespace MonsterGame
     {
         private string name;
         List<Monster> monsters = new List<Monster>();
+        List<Room> attachedRooms = new List<Room>();
+
+        public string Name
+        {
+            get { return name; }
+        }
 
         public Room(string name, int aantalMonsters = 3)
         {
@@ -18,6 +24,11 @@ namespace MonsterGame
             {
                 monsters.Add(new Monster(OrkNameGenerator.GetRandomOrkNaam()));
             }
+        }
+
+        public void Attach(Room room)
+        {
+            attachedRooms.Add(room);
         }
 
         public void Enter(Hero hero)
@@ -31,23 +42,54 @@ namespace MonsterGame
                 PrintRoomMenu();
                 
                 var invoer = Console.ReadLine();
-                if (invoer == "x" || invoer == "X")
+                invoer = invoer.ToLower();
+
+                if (invoer == "x")
                 {
                     inRoom = false;
+                    Console.WriteLine("Hero leaves {0}.", this.Name);
                 }
                 else
                 {
-                    // TODO: check invoer!
-                    var keuze = int.Parse(invoer);
-                    if (hero.Attack(monsters[keuze - 1]))
+                    int monsterkeuze;
+                    if( int.TryParse(invoer, out monsterkeuze) )
                     {
-                        monsters.RemoveAt(keuze - 1);
-                    };
+                        // it's a number, so we're selecting a monster
+                        if( monsterkeuze > 0 && monsterkeuze <= monsters.Count)
+                        {
+                            // attack monster and remove if dead
+                            if (hero.Attack(monsters[monsterkeuze - 1]))
+                            {
+                                monsters.RemoveAt(monsterkeuze - 1);
+                            };
+                        }
+                    }
+                    else
+                    {
+                        // it's a letter, so we're selecting a room
+                        char r = 'a'; 
+                        var index = invoer[0] - r;
+                        Console.WriteLine(invoer);
+                        Console.WriteLine(index);
+                        attachedRooms[index].Enter(hero);
+                    }
+
                 }
             }
         }
 
         private void PrintRoomMenu()
+        {
+            PrintAttachedRooms();
+            PrintMonsters();
+
+            Console.WriteLine("x. Leave room");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(">>> ");
+            Console.ResetColor();
+        }
+
+        private void PrintMonsters()
         {
             Console.WriteLine("In this room there are {0} monsters.", monsters.Count);
             Console.WriteLine("Attack who?");
@@ -57,10 +99,16 @@ namespace MonsterGame
                 keuzeTeller++;
                 Console.WriteLine("{0}. {1} (HP: {2})", keuzeTeller, monster.Name, monster.HP);
             }
-            Console.WriteLine("x. Leave room");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(">>> ");
-            Console.ResetColor();
+        }
+
+        private void PrintAttachedRooms()
+        {
+            char keuze = 'a';
+            foreach(var room in attachedRooms)
+            {
+                Console.WriteLine("{0}. Go to {1}", keuze, room.Name);
+                keuze++;
+            }
         }
     }
 }
