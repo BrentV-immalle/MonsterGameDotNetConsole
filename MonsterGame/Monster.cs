@@ -22,12 +22,24 @@ namespace MonsterGame
             //Console.WriteLine("{0} was created.", name);
         }
 
-        public void Attack(Monster m)
+        // returns wether monster died
+        public bool Attack(Monster m)
         {
             var damage = rndGen.Next(0, this.ap+1);
             m.HP -= damage;
-            Console.WriteLine("{0} attacks {1} and does {2} damage. {1} now has {3} HP.",
+            if(m.HP <= 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("{0} attacks {1} and does {2} damage. {1} dies.",
+                this.name, m.name, damage);
+                Console.ResetColor();
+                return true;
+            } else
+            {
+                Console.WriteLine("{0} attacks {1} and does {2} damage. {1} now has {3} HP.",
                 this.name, m.name, damage, m.HP);
+                return false;
+            }    
         }
 
         public string Name

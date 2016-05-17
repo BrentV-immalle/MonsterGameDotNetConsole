@@ -8,6 +8,7 @@ namespace MonsterGame
 {
     class Hero
     {
+        private static Random rndGen = new Random();
         private string name;
         private int hp;
         private int ap;
@@ -20,12 +21,24 @@ namespace MonsterGame
             //Console.WriteLine("{0} was created.", name);
         }
 
-        public void Attack(Monster m)
+        public bool Attack(Monster m)
         {
-            var damage = 10;
+            var damage = rndGen.Next(0, this.ap + 1);
             m.HP -= damage;
-            Console.WriteLine("{0} attacks {1} and does {2} damage. {1} now has {3} HP.",
+            if (m.HP <= 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("{0} attacks {1} and does {2} damage. {1} dies.",
+                this.name, m.Name, damage);
+                Console.ResetColor();
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("{0} attacks {1} and does {2} damage. {1} now has {3} HP.",
                 this.name, m.Name, damage, m.HP);
+                return false;
+            }
         }
 
         public string Name

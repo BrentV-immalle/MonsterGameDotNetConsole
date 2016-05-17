@@ -25,20 +25,11 @@ namespace MonsterGame
             Console.WriteLine("Hero enters {0}.", this.name);
 
             bool inRoom = true;
-            
-            Console.WriteLine("In this room there are {0} monsters.", monsters.Count);
-            Console.WriteLine("Attack who?");
-            int keuzeTeller = 0;
-            foreach(var monster in monsters)
-            {
-                keuzeTeller++;
-                Console.WriteLine("{0}. {1} (HP: {2})", keuzeTeller, monster.Name, monster.HP);
-            }
-            Console.WriteLine("x. Leave room");
 
             while(inRoom)
             {
-                Console.WriteLine(">>>");
+                PrintRoomMenu();
+                
                 var invoer = Console.ReadLine();
                 if (invoer == "x" || invoer == "X")
                 {
@@ -46,30 +37,30 @@ namespace MonsterGame
                 }
                 else
                 {
-                    var keuze = 0;
-
-                    try
+                    // TODO: check invoer!
+                    var keuze = int.Parse(invoer);
+                    if (hero.Attack(monsters[keuze - 1]))
                     {
-                        keuze = int.Parse(invoer);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine("Try again...");
-                    }
-
-                    try
-                    {
-                        hero.Attack(monsters[keuze - 1]);
-                    } catch(IndexOutOfRangeException e) 
-                    {
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine("Monster doesn't exist. Try again.");
-                    }
-
+                        monsters.RemoveAt(keuze - 1);
+                    };
                 }
             }
-            
+        }
+
+        private void PrintRoomMenu()
+        {
+            Console.WriteLine("In this room there are {0} monsters.", monsters.Count);
+            Console.WriteLine("Attack who?");
+            int keuzeTeller = 0;
+            foreach (var monster in monsters)
+            {
+                keuzeTeller++;
+                Console.WriteLine("{0}. {1} (HP: {2})", keuzeTeller, monster.Name, monster.HP);
+            }
+            Console.WriteLine("x. Leave room");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(">>> ");
+            Console.ResetColor();
         }
     }
 }
