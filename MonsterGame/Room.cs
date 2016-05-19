@@ -29,11 +29,25 @@ namespace MonsterGame
         public void Attach(Room room)
         {
             attachedRooms.Add(room);
+            //also make sure we can go the other way
+            if (!room.IsAttached(this))
+            {
+                room.Attach(this);
+            }
+        }
+
+        private bool IsAttached(Room room)
+        {
+            if(attachedRooms.Contains(room))
+            {
+                return true;
+            }
+            return false;
         }
 
         public void Enter(Hero hero)
         {
-            Console.WriteLine("Hero enters {0}.", this.name);
+            Console.WriteLine("{0} enters {1}.", hero.Name, this.name);
 
             bool inRoom = true;
 
@@ -47,7 +61,8 @@ namespace MonsterGame
                 if (invoer == "x")
                 {
                     inRoom = false;
-                    Console.WriteLine("Hero leaves {0}.", this.Name);
+                    Console.WriteLine("{0} leaves game.", hero.Name);
+                    Environment.Exit(0);
                 }
                 else
                 {
@@ -83,7 +98,7 @@ namespace MonsterGame
             PrintAttachedRooms();
             PrintMonsters();
 
-            Console.WriteLine("x. Leave room");
+            Console.WriteLine("x. Leave game");
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(">>> ");
             Console.ResetColor();

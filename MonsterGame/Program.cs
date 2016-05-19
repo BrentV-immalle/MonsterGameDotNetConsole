@@ -10,13 +10,19 @@ namespace MonsterGame
     {
         static void Main(string[] args)
         {
-            Hero hero = new Hero("Ikke", 200, 30);
+            Hero hero = new Hero("Ikke", 200, 80);
 
             var hall = new Room("hall");
-            hall.Attach(new Room("office", 10));
-            hall.Attach(new Room("kitchen", 15));
 
-            hall.Enter(hero);
+            var kitchen = new Room("kitchen", 15);
+            var office = new Room("office", 10);
+
+            var garden = new Room("garden", 5);
+
+            garden.Attach(hall);
+            hall.Attach(kitchen);
+            hall.Attach(office);
+            garden.Enter(hero);
         }
 
     }
