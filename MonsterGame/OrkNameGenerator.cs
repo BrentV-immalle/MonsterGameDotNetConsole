@@ -15,7 +15,7 @@ namespace MonsterGame
         public static string GetRandomOrkNaam()
         {
             string naam = "";
-            naam += medeklinkers[rndGen.Next(medeklinkers.Count)];
+            naam += medeklinkers[rndGen.Next(medeklinkers.Count)].ToString().ToUpper();
             naam += klinkers[rndGen.Next(klinkers.Count)];
             naam += medeklinkers[rndGen.Next(medeklinkers.Count)];
 

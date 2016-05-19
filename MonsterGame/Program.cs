@@ -12,12 +12,10 @@ namespace MonsterGame
         {
             Hero hero = new Hero("Ikke", 200, 80);
 
-            var hall = new Room("hall");
-
-            var kitchen = new Room("kitchen", 15);
-            var office = new Room("office", 10);
-
-            var garden = new Room("garden", 5);
+            var hall = new Room("hall", description: "A very narrow hallway...");
+            var kitchen = new Room("kitchen", 15, "It smells like something died in here...");
+            var office = new Room("office", 10, "It's a long time ago somebody was actually working in here...");
+            var garden = new Room("garden", 5, "No sign of grass in this garden.\nIt contains only huge weeds.\nSome are longer than you.");
 
             garden.Attach(hall);
             hall.Attach(kitchen);

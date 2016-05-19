@@ -9,6 +9,7 @@ namespace MonsterGame
     class Room
     {
         private string name;
+        private string description;
         List<Monster> monsters = new List<Monster>();
         List<Room> attachedRooms = new List<Room>();
 
@@ -17,13 +18,19 @@ namespace MonsterGame
             get { return name; }
         }
 
-        public Room(string name, int aantalMonsters = 3)
+        public string Description
+        {
+            get { return description; }
+        }
+
+        public Room(string name, int aantalMonsters = 3, string description = "")
         {
             this.name = name;
             for(var i=0; i<aantalMonsters; i++)
             {
                 monsters.Add(new Monster(OrkNameGenerator.GetRandomOrkNaam()));
             }
+            this.description = description;
         }
 
         public void Attach(Room room)
@@ -95,6 +102,10 @@ namespace MonsterGame
 
         private void PrintRoomMenu()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(this.description);
+            Console.ResetColor();
+
             PrintAttachedRooms();
             PrintMonsters();
 
@@ -106,7 +117,10 @@ namespace MonsterGame
 
         private void PrintMonsters()
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("In this room there are {0} monsters.", monsters.Count);
+            Console.ResetColor();
+
             Console.WriteLine("Attack who?");
             int keuzeTeller = 0;
             foreach (var monster in monsters)
